@@ -14,10 +14,12 @@ import Constants from "expo-constants";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { fetchUser, updateUser,saveUser as saveUserApi } from "@/util/api";
+import { saveUser } from "@/util/storage";
 
 // Base API URL - uses Expo config if available, falls back to local development server
 const API_URL =
-  Constants.expoConfig?.extra?.API_URL || "http://192.168.43.249:5000";
+  Constants.expoConfig?.extra?.API_URL || "http://192.168.43.249:5000/api";
 
 export default function AccountSetupScreen() {
   // State management for user profile data
@@ -30,13 +32,13 @@ export default function AccountSetupScreen() {
   const router = useRouter(); // Navigation router instance
 
   // Fetches user data from API when component mounts
-  const fetchUser = async () => {
+  const loadUser = async () => {
     try {
-      const response = await axios.get(`${API_URL}/users/${phone}`);
-      if (response.data) {
-        setName(response.data.name || ""); // Sets name from response
-        setId(response.data._id); // Sets user ID
-        setProfileImage(response.data.profileImage || null); // Sets profile image if exists
+      const data = await fetchUser(phone)
+      if (data) {
+        setName(data.name || ""); // Sets name from response
+        setId(data._id); // Sets user ID
+        setProfileImage(data.profileImage || null); // Sets profile image if exists
       }
     } catch (error) {
       console.log("User not found", error); // Logs error if user doesn't exist
@@ -87,20 +89,16 @@ export default function AccountSetupScreen() {
       // Determines if this is an update or create operation
       if (id) {
         // Update existing user
-        response = await axios.put(`${API_URL}/users/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        response = await updateUser(formData,id)
       } else {
         // Create new user
-        response = await axios.post(`${API_URL}/users`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        response = await saveUserApi(formData,id)
       }
 
       // On successful response
-      if (response.data) {
+      if (response) {
         // Save user data to local storage
-        await AsyncStorage.setItem("user", JSON.stringify(response.data));
+        await saveUser(response)
         // Navigate to chats screen
         router.push("/chats");
       } else {
@@ -115,7 +113,7 @@ export default function AccountSetupScreen() {
 
   // Effect hook for component lifecycle events
   useEffect(() => {
-    fetchUser(); // Fetch user data on component mount
+    loadUser(); // Fetch user data on component mount
 
     // Handles Android hardware back button press
     const handleBackPress = () => {
