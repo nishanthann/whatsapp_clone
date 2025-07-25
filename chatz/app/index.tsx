@@ -53,7 +53,7 @@ export default function Index() {
       <Image
         className="rounded-md"
         style={{ width: 135, height: 135 }}
-        source={require("../assets/images/whats2.png")}
+        source={require("../assets/images/whats3.png")}
       />
 
       {/* App Title */}
