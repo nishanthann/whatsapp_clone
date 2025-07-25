@@ -3,11 +3,11 @@
  
  
  const API_URL =
-  Constants.expoConfig?.extra?.API_URL || "http://192.168.43.249:5000/api";
+  Constants.expoConfig?.extra?.API_URL || "http://192.168.47.7:5000/api";
 
  
  // Fetches user data from API when component mounts
-  export const fetchUser = async (phone: string) => {
+  export const fetchUser = async (phone: any) => {
     try {
       const response = await axios.get(`${API_URL}/users/${phone}`);
       return response.data;

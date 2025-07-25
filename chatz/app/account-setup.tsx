@@ -8,18 +8,16 @@ import {
   ActivityIndicator,
   BackHandler,
 } from "react-native";
-import axios from "axios";
+
 import { useEffect, useState } from "react";
-import Constants from "expo-constants";
+
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { fetchUser, updateUser,saveUser as saveUserApi } from "@/util/api";
 import { saveUser } from "@/util/storage";
 
-// Base API URL - uses Expo config if available, falls back to local development server
-const API_URL =
-  Constants.expoConfig?.extra?.API_URL || "http://192.168.43.249:5000/api";
+
 
 export default function AccountSetupScreen() {
   // State management for user profile data
