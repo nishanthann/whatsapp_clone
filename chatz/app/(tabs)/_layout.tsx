@@ -51,7 +51,7 @@ export default function TabLayout() {
     headerTitleStyle: {
       fontSize: 38, // Larger size for Chatz! only
       fontWeight: 'bold', // Optional: Add boldness
-      color: 'black'
+      color: '#B45309'
     },
     headerStyle: {
       height: 120, // Set custom height (default is ~56-64px)

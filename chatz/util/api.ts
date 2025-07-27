@@ -41,3 +41,14 @@
       console.log("Saving api failed", error); // Logs error if user doesn't exist
     }
   };
+
+   // Fetches chat data from API when component mounts
+  export const fetchChats = async (userId: any) => {
+    try {
+      const response = await axios.get(`${API_URL}/conversations/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+      return null; // Explicitly return null for better error handling
+    }
+  };
